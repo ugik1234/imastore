@@ -104,8 +104,8 @@ class UserController extends CI_Controller
 			$emailContent .= '<tr><td style="height:20px"></td></tr>';
 			$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='kpbladababel.com/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>kpbladababel.com</a></p></td></tr></table></body></html>";
 		} else {
-			$send['subject'] = 'Activation KPB Lada Babel';
-			$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://kpbladababel.com/assets/img/logo-kpb.png" width="60px" vspace=0 /></td></tr>';
+			$send['subject'] = 'Activation Store PT INDOMETALASIA';
+			$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://store.indometalasia.com/assets/images/ima-transparent2.png" width="60px" vspace=0 /></td></tr>';
 			$emailContent .= '<tr><td style="height:20px"></td></tr>';
 			$url_act = base_url("/activator/{$data['id']}/{$data['activator']}");
 			$emailContent .= "<br><br> Username :  {$data['username']}
@@ -116,7 +116,7 @@ class UserController extends CI_Controller
 
 						<br> manual activate = {$url_act}";
 			$emailContent .= '<tr><td style="height:20px"></td></tr>';
-			$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='kpbladababel.com/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>kpbladababel.com</a></p></td></tr></table></body></html>";
+			$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='indometalasia.com' target='_blank' style='text-decoration:none;color: #60d2ff;'>indometalasia.com</a></p></td></tr></table></body></html>";
 		}
 		$send['message'] = $emailContent;
 
