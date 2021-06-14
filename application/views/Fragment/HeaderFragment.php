@@ -186,12 +186,12 @@
                 <div class="navigation navigation-main">
                     <?php if (!empty($this->session->userdata['username'])) {  ?>
                         <a href="#" class="open-envelope"><i class="icon icon-envelope"></i></a>
+                        <a href="#" class="open-cart"><i class="icon icon-cart"></i> <span id="cart_count2"><?= $cart_count ?></span></a>
                     <?php }  ?>
 
 
                     <a href="#" class="open-login"><i class="icon icon-user"></i></a>
                     <a href="#" class="open-search"><i class="icon icon-magnifier"></i></a>
-                    <a href="#" class="open-cart"><i class="icon icon-cart"></i> <span id="cart_count2"><?= $cart_count ?></span></a>
                     <a href="#" class="open-menu"><i class="icon icon-menu"></i></a>
                     <div class="floating-menu">
                         <!--mobile toggle menu trigger-->
