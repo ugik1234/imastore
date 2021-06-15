@@ -101,7 +101,7 @@ if (!function_exists('apps_url')) {
 	 */
 	function apps_url()
 	{
-		return 'https://indometalasia.com/apps/';
+		return ' http://localhost:85/ima/';
 	}
 }
 
