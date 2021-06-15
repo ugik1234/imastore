@@ -163,6 +163,7 @@
                         <li class="left-side"><a href="#">Jasa</a></li>
                         <li class="left-side"><a href="#">Sewa</a></li>
                         <?php if (!empty($this->session->userdata['username'])) {  ?>
+                            <li class="left-side"><a href="<?= base_url() ?>invoice">Invoice</a></li>
                             <li>
                                 <a href="javascript:void(0);" class="open-envelope"><i class="icon icon-envelope"></i></a>
                             </li>
@@ -199,10 +200,12 @@
                             <span class="close-menu"><i class="icon icon-cross"></i></span>
                         </div>
 
-                        <ul>
-                            <?php if (!empty($this->session->userdata()['nama_role'])) $this->load->view('Fragment/' . strtolower($this->session->userdata('nama_role')) . '/SidebarFragment'); ?>
+                        <!-- <ul> -->
+                        <?php
+                        // if (!empty($this->session->userdata()['nama_role'])) $this->load->view('Fragment/' . strtolower($this->session->userdata('nama_role')) . '/SidebarFragment'); 
+                        ?>
 
-                            <li>
+                        <!-- <li>
                                 <a href="#">Home
                                     <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
                                 <div class="navbar-dropdown navbar-dropdown-single">
@@ -674,7 +677,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
 

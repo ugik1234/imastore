@@ -62,6 +62,65 @@ class PublicController extends CI_Controller
     $this->load->view('Page', $pageData);
   }
 
+  public function payment()
+  {
+    $this->SecurityModel->userOnlyGuard(true);
+    $no = $this->input->get('s');
+    $data['parent'] = $this->ProductModel->getInvoice(array('no_invoice' => $no))[0];
+    $data['item'] = $this->ProductModel->getItemInvoice(array('id_invoice' => $data['parent']['id']));
+
+    $pageData = array(
+      'title' => 'Payment',
+      'content' => 'user/Payment',
+      'dataContent' => $data,
+    );
+    $this->load->view('Page', $pageData);
+  }
+
+  public function delivery()
+  {
+    $this->SecurityModel->userOnlyGuard(true);
+    $pageData = array(
+      'title' => 'Delivery',
+      'content' => 'user/Delivery',
+    );
+    $this->load->view('Page', $pageData);
+  }
+
+
+  public function invoice()
+  {
+    $this->SecurityModel->userOnlyGuard(true);
+    $pageData = array(
+      'title' => 'Invoice',
+      'content' => 'user/Invoice',
+    );
+    $this->load->view('Page', $pageData);
+  }
+  public function invoiceopen()
+  {
+    $this->SecurityModel->userOnlyGuard(true);
+    $filter['no_invoice'] = $this->input->get()['number'];
+    if (empty($filter['no_invoice'])) {
+      $pageData = array(
+        'title' => 'ErrorPage',
+        'content' => 'ErrorPage',
+      );
+      $this->load->view('Page', $pageData);
+    } else {
+      $data['parent'] = $this->ProductModel->getInvoice($filter)[0];
+      $data['item'] = $this->ProductModel->getItemInvoice(array('id_invoice' => $data['parent']['id']));
+
+      $pageData = array(
+        'title' => 'Invoice',
+        'content' => 'user/InvoiceDetail',
+        'dataContent' => $data
+      );
+      $this->load->view('Page', $pageData);
+    }
+  }
+
+
   public function getProduct()
   {
     try {
@@ -85,6 +144,147 @@ class PublicController extends CI_Controller
       ExceptionHandler::handle($e);
     }
   }
+
+
+  public function payment_proccess()
+  {
+    try {
+      $this->SecurityModel->userOnlyGuard(true);
+
+      $input = $this->input->post();
+      $this->validation_cart();
+      $total = 0;
+      $final_price = $this->ProductModel->MyCart();
+      if (empty($final_price)) {
+        throw new UserException("Cart Kosong !!", USER_NOT_FOUND_CODE);
+      }
+      $i = 0;
+      foreach ($final_price as $s) {
+        if ($s['type'] == 'Service') {
+          $startTimeStamp = new DateTime($s['from_order']);
+          $endTimeStamp = new DateTime($s['to_order']);
+          $numberDays =
+            $startTimeStamp->diff($endTimeStamp);
+          $d =  $numberDays->format('%a');
+          $h =  $numberDays->format('%h');
+          $strstar = strtotime($s['from_order']);
+          $strend = strtotime($s['to_order']);
+          if ($h > 0) $d = (int)$d + 1;
+          $total = $total + ($d * $s['purchase']);
+          $final_price[$i]['tmp_qyt'] = $d;
+        } else {
+          $total = $total + ($s['qyt'] * $s['purchase']);
+          $final_price[$i]['tmp_qyt'] = $s['qyt'];
+        };
+        $i++;
+      }
+      $data['qyt'] = $i;
+      $data['delivery_method'] = $input['deliveryOption'];
+      if ($input['deliveryOption'] == 'pickup') {
+        $data['alamat_pengiriman'] = '';
+        $data['delivery_price'] = 0;
+      } else if ($input['deliveryOption'] == 'outer_prov') {
+        $total = $total + 10000000;
+        $data['alamat_pengiriman'] = $input['alamat_pengiriman'];
+        $data['delivery_price'] = 10000000;
+      } else if ($input['deliveryOption'] == 'inner_prov') {
+        $total = $total + 2000000;
+        $data['alamat_pengiriman'] = $input['alamat_pengiriman'];
+        $data['delivery_price'] = 2000000;
+      }
+
+      $no_order = $this->ProductModel->count_order_date();
+      if (strlen($no_order) == 1)
+        $no_order = '00' . $no_order;
+      if (strlen($no_order) == 2)
+        $no_order = '0' . $no_order;
+      $data['total'] = $total;
+      $data['invoice_number'] = $no_order . "/SI" . '/' . date('m/y');
+      $data['id_user'] = $this->session->userdata()['id_user'];
+      // echo json_encode(array("data" => $data));
+      $id_invoice = $this->ProductModel->addInvoice($data);
+
+      foreach ($final_price as $s) {
+        $this->ProductModel->addOrder($s, $id_invoice);
+        if ($s['type'] == 'Service') {
+        } else {
+          $total = $total + ($s['qyt'] * $s['purchase']);
+        };
+        $i++;
+      }
+
+      // $this->ProductModel->clearCart();
+      // redirect(base_url('payment?s=' . $no_order));
+      // die();
+      echo json_encode(array('data' => $data['invoice_number']));
+
+      // $data = $this->ProductModel->cek_ketersediaan_jasa($input);
+    } catch (Exception $e) {
+      ExceptionHandler::handle($e);
+    }
+  }
+
+  function validation_cart()
+  {
+    $this->SecurityModel->userOnlyGuard(true);
+
+    $total = 0;
+    $final_price = $this->ProductModel->MyCart();
+    $i = 0;
+    $arr_id = [];
+    $arr_idqyt = [];
+    foreach ($final_price as $s) {
+      if ($s['type'] == 'Service') {
+        $startTimeStamp = new DateTime($s['from_order']);
+        $endTimeStamp = new DateTime($s['to_order']);
+        $numberDays =
+          $startTimeStamp->diff($endTimeStamp);
+        $d =  $numberDays->format('%a');
+        $h =  $numberDays->format('%h');
+        $strstar = strtotime($s['from_order']);
+        $strend = strtotime($s['to_order']);
+        if ($strstar > $strend) {
+          // echo 'tidak valid';
+          throw new UserException("Tanggal order Item " . $s['product_name'] . " tidak valid !", USER_NOT_FOUND_CODE);
+        }
+        foreach ($arr_id as $ar) {
+          if ($s['product_id'] == $ar['id']) {
+            // echo 'same<br>';
+            if ($strstar > $ar['start'] && $strstar < $ar['end']) {
+              // echo 'tgl mulai tumburan';
+              throw new UserException("Tanggal order Item " . $s['product_name'] . " terjadi kesalahan, harap periksa tanggal order !", USER_NOT_FOUND_CODE);
+            }
+            if ($strend > $ar['start'] && $strend < $ar['end']) {
+              // echo 'tgl End tumburan';
+              throw new UserException("Tanggal order Item " . $s['product_name'] . " terjadi kesalahan, harap periksa tanggal order !", USER_NOT_FOUND_CODE);
+            }
+          }
+        }
+        array_push($arr_id, array('id' => $s['product_id'], 'start' => $strstar, 'end' => $strend));
+        if ($h > 0) $d = (int)$d + 1;
+        $total = $total + ($d * $s['purchase']);
+      } else {
+        $co = 0;
+        array_push($arr_idqyt, array('id' => $s['product_id']));
+        foreach ($arr_idqyt as $ars) {
+          if ($s['product_id'] == $ars['id']) {
+            $co = $co + $s['qyt'];
+            // echo 'same in order ';
+            // echo $co;
+            // echo '<br>stok = ' . $s['stock'] . '<br>';
+            if ($s['stock'] < $co) {
+              // echo 'Melebihi Stock';
+              throw new UserException("Jumlah order item " . $s['product_name'] . " melebihi batas stock !", USER_NOT_FOUND_CODE);
+            }
+          }
+        }
+
+        $total = $total + ($s['qyt'] * $s['purchase']);
+      };
+    }
+    return $total;
+  }
+
 
   public function deleteCart()
   {
@@ -122,13 +322,16 @@ class PublicController extends CI_Controller
 
   public function MyCart()
   {
-    // try {
+    $this->SecurityModel->userOnlyGuard(true);
 
     return $this->ProductModel->MyCart();
-    //   echo json_encode($data);
-    // } catch (Exception $e) {
-    //   ExceptionHandler::handle($e);
-    // }
+  }
+
+  public function MyInvoice()
+  {
+    $this->SecurityModel->userOnlyGuard(true);
+
+    echo json_encode($this->ProductModel->MyInvoice());
   }
 
   public function addCart()

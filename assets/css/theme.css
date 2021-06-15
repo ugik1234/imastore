@@ -5245,16 +5245,16 @@ nav .cart-wrapper.open {
 		vertical-align: middle;
 	}
 	.checkout .cart-block > div:nth-child(1) {
-		width: 15%;
+		width: 20%;
 	}
 	.checkout .cart-block > div:nth-child(2) {
-		width: 45%;
+		width: 30%;
 	}
 	.checkout .cart-block > div:nth-child(3) {
-		width: 10%;
+		width: 20%;
 	}
 	.checkout .cart-block > div:nth-child(4) {
-		width: 30%;
+		width: 20%;
 	}
 	.checkout .cart-block > div.quantity,
 	.checkout .cart-block > div.price {
