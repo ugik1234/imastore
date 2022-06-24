@@ -2,7 +2,7 @@
                     <div class="h4">Sign in</div>
                     <form id="loginForm">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="username" placeholder="Username" required="required" autocomplete="username" />
+                            <input type="text" class="form-control" name="email" placeholder="Email" required="required" autocomplete="email" />
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control" name="password" placeholder="Password" required="required" autocomplete="current-password" />

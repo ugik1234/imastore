@@ -1,159 +1,191 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class SecurityModel extends CI_Model {
+class SecurityModel extends CI_Model
+{
 
-  public function apiKeyGuard(){
+  public function apiKeyGuard()
+  {
     $headers = getallheaders();
-    if(!isset($headers['X-Api-Key']) || NetworkIO::$apiKeys['sim'] != $headers['X-Api-Key']){
+    if (!isset($headers['X-Api-Key']) || NetworkIO::$apiKeys['sim'] != $headers['X-Api-Key']) {
       header("HTTP/1.1 401 Unauthorized");
       exit;
     }
   }
 
-  public function hasUserdataKeyGuard($key, $ajax = FALSE){
-    if($this->session->userdata($key) == NULL){
-      if($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
+  public function hasUserdataKeyGuard($key, $ajax = FALSE)
+  {
+    if ($this->session->userdata($key) == NULL) {
+      if ($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
       redirect($this->session->userdata('nama_controller'));
     }
   }
 
-  public function certainUserGuard($userIds = array(), $ajax = FALSE){
-    if(!in_array($this->session->userdata('id_user'), $userIds)){
-      if($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
+  public function certainUserGuard($userIds = array(), $ajax = FALSE)
+  {
+    if (!in_array($this->session->userdata('id_user'), $userIds)) {
+      if ($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
       redirect($this->session->userdata('nama_controller'));
     }
   }
 
-  public function usulanStepGuard($usulan, $step, $ajax = FALSE){
-    if($usulan['status_pengisian'] != $step){
-      if($ajax) throw new UserException('Kamu tidak berhak mengubah usulan pada tahap ini', UNAUTHORIZED_CODE);
+  public function usulanStepGuard($usulan, $step, $ajax = FALSE)
+  {
+    if ($usulan['status_pengisian'] != $step) {
+      if ($ajax) throw new UserException('Kamu tidak berhak mengubah usulan pada tahap ini', UNAUTHORIZED_CODE);
       redirect($this->session->userdata('nama_controller'));
     }
   }
 
-  public function guestOnlyGuard($ajax = false){
-    if($this->session->userdata('id_user')){
-      if($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
+  public function guestOnlyGuard($ajax = false)
+  {
+    if ($this->session->userdata('id_user')) {
+      if ($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
       redirect($this->session->userdata('nama_controller'));
     }
   }
 
-  public function userOnlyGuard($ajax = false){
-    if(!$this->session->has_userdata('id_user')){
-      if($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
+  public function userOnlyGuard($ajax = false)
+  {
+    if (!$this->session->has_userdata('id_user')) {
+      if ($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
       redirect('login');
     }
   }
 
-  public function roleOnlyGuard($role, $ajax = false){
-    if(strtolower($this->session->userdata('nama_role')) != $role){
-      if($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
+  public function roleOnlyGuard($role, $ajax = false)
+  {
+    if (strtolower($this->session->userdata('nama_role')) != $role) {
+      if ($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
       redirect($this->session->userdata('nama_controller'));
     }
   }
 
-  public function rolesOnlyGuard($roles = [], $ajax = false){
-    if(!in_array(strtolower($this->session->userdata('nama_role')), $roles)){
-      if($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
+  public function rolesOnlyGuard($roles = [], $ajax = false)
+  {
+    if (!in_array(strtolower($this->session->userdata('nama_role')), $roles)) {
+      if ($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
       redirect($this->session->userdata('nama_controller'));
     }
   }
 
-  public function pengusulSubTypeGuard($subTypes, $ajax = false){
-    foreach($subTypes as $sT){
-      if($this->session->userdata("id_{$sT}")) return;
+  public function pengusulSubTypeGuard($subTypes, $ajax = false)
+  {
+    foreach ($subTypes as $sT) {
+      if ($this->session->userdata("id_{$sT}")) return;
     }
-    if($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
+    if ($ajax) throw new UserException('Kamu tidak berhak mengakses resource ini', UNAUTHORIZED_CODE);
     redirect($this->session->userdata('nama_controller'));
   }
 
-  public function checkUniquePosition($p, $pd){
-    if($pd['posisi'] != "KETUA"){
+  public function checkUniquePosition($p, $pd)
+  {
+    if ($pd['posisi'] != "KETUA") {
       return TRUE;
     }
 
-		foreach($p['dosen'] as $d){
-			if($d['posisi'] == "KETUA"){
+    foreach ($p['dosen'] as $d) {
+      if ($d['posisi'] == "KETUA") {
         throw new UserException('Posisi ketua tidak boleh lebih dari satu.', DUPLICATE_UNIQUE_POSISI_CODE);
       }
     }
     return FALSE;
-	}
-
-  public function loginValidation(){
-    return array($this->idUser, $this->password);
   }
-  
+
+  public function loginValidation()
+  {
+    return array($this->email, $this->password);
+  }
+
   private $role = array(
     'field' => 'nama_role',
     'label' => 'Role',
     'rules' => 'required|trim'
   );
 
-  public function changePasswordValidation(){
+  public function changePasswordValidation()
+  {
     return array($this->password, $this->repassword);
   }
 
-  public function getPenelitian(){
+  public function getPenelitian()
+  {
     return array($this->tahun);
   }
 
-  public function addPenelitian(){
+  public function addPenelitian()
+  {
     return array($this->idProgram, $this->tahun, $this->judul, $this->idSkema, $this->noSK);
   }
 
-  public function editPenelitian(){
-    return array($this->idPenelitian, $this->idProgram, $this->tahun, $this->judul, 
-      $this->idSkema, $this->noSK);
+  public function editPenelitian()
+  {
+    return array(
+      $this->idPenelitian, $this->idProgram, $this->tahun, $this->judul,
+      $this->idSkema, $this->noSK
+    );
   }
 
-  public function deletePenelitian(){
+  public function deletePenelitian()
+  {
     return array($this->idPenelitian);
   }
 
-  public function addPenelitianDosen(){
+  public function addPenelitianDosen()
+  {
     return array($this->idPenelitian, $this->idDosen, $this->posisi);
   }
 
-  public function editPenelitianDosen(){
+  public function editPenelitianDosen()
+  {
     return array($this->idPenelitianDosen, $this->idPenelitian, $this->idDosen, $this->posisi);
   }
 
-  public function deletePenelitianDosen(){
+  public function deletePenelitianDosen()
+  {
     return array($this->idPenelitianDosen);
   }
 
-  public function getPengabdian(){
+  public function getPengabdian()
+  {
     return array($this->tahun);
   }
 
-  public function addPengabdian(){
+  public function addPengabdian()
+  {
     return array($this->idProgram, $this->tahun, $this->judul, $this->idSkema, $this->noSK);
   }
 
-  public function editPengabdian(){
-    return array($this->idPengabdian, $this->idProgram, $this->tahun, $this->judul, 
-      $this->idSkema, $this->noSK);
+  public function editPengabdian()
+  {
+    return array(
+      $this->idPengabdian, $this->idProgram, $this->tahun, $this->judul,
+      $this->idSkema, $this->noSK
+    );
   }
 
-  public function deletePengabdian(){
+  public function deletePengabdian()
+  {
     return array($this->idPengabdian);
   }
 
-  public function addPengabdianDosen(){
+  public function addPengabdianDosen()
+  {
     return array($this->idPengabdian, $this->idDosen, $this->posisi);
   }
 
-  public function editPengabdianDosen(){
+  public function editPengabdianDosen()
+  {
     return array($this->idPengabdianDosen, $this->idPengabdian, $this->idDosen, $this->posisi);
   }
 
-  public function deletePengabdianDosen(){
+  public function deletePengabdianDosen()
+  {
     return array($this->idPengabdianDosen);
   }
 
-  public function getKinerja(){
+  public function getKinerja()
+  {
     return array($this->tahun, $this->semester);
   }
 
@@ -240,6 +272,11 @@ class SecurityModel extends CI_Model {
     'label' => 'Password',
     'rules' => 'required|trim'
   );
+  private $email = array(
+    'field' => 'email',
+    'label' => 'email',
+    'rules' => 'required|trim'
+  );
 
   private $repassword = array(
     'field' => 'repassword',
@@ -264,5 +301,4 @@ class SecurityModel extends CI_Model {
     'label' => 'Bulan',
     'rules' => 'required|trim|max_length[2]'
   );
-  
 }

@@ -171,9 +171,19 @@ class UserModel extends CI_Model
 		return array_values($row)[0];
 	}
 
+
+	public function getUserByEmail($email = NULL)
+	{
+		$row = $this->getAllUser(['email' => $email, 'is_login' => TRUE]);
+		if (empty($row)) {
+			throw new UserException("User yang kamu cari tidak ditemukan", USER_NOT_FOUND_CODE);
+		}
+		return array_values($row)[0];
+	}
+
 	public function login($loginData)
 	{
-		$user = $this->getUserByUsername($loginData['username']);
+		$user = $this->getUserByEmail($loginData['email']);
 		// echo json_encode($user);
 		// die();
 		if (md5(($loginData['password'])) !== $user['password'])

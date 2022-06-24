@@ -19,7 +19,7 @@
 
                             <!--signin-->
 
-                            <div class="login-block login-block-signin">
+                            <!-- <div class="login-block login-block-signin">
 
                                 <div class="h4">Sign in <a href="javascript:void(0);" class="btn btn-main btn-xs btn-register pull-right">create an account</a></div>
 
@@ -50,13 +50,14 @@
                                         <a href="#" class="btn btn-main">Login</a>
                                     </div>
                                 </div>
-                            </div>
-                            <!--/signin-->
-                            <!--signup-->
+                            </div> -->
+
 
                             <div class="login-block login-block-signup">
 
-                                <div class="h4">Register now <a href="javascript:void(0);" class="btn btn-main btn-xs btn-login pull-right">Log in</a></div>
+                                <div class="h4">Register now
+                                    <!-- <a href="javascript:void(0);" class="btn btn-main btn-xs btn-login pull-right">Log in</a> -->
+                                </div>
 
                                 <hr />
                                 <form id="registerForm" class="m-t" role="form">
