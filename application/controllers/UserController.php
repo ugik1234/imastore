@@ -75,19 +75,11 @@ class UserController extends CI_Controller
 	public function lupasProcess()
 	{
 		try {
-			// $this->SecurityModel->guestOnlyGuard(TRUE);
-			// Validation::ajaxValidateForm($this->SecurityModel->loginValidation());
 
 			$data = $this->input->post();
-			// var_dump($data);
-			// die();
-
 			$data = $this->UserModel->cekUserByEmailLupaPassword($data);
-
-			// var_dump($data);
-			// die();
 			$this->email_send($data, 'lupa_password');
-			echo json_encode(array("error" => FALSE, "user" => 'success', 'data' => $data));
+			echo json_encode(array("error" => FALSE, "user" => 'success'));
 		} catch (Exception $e) {
 			ExceptionHandler::handle($e);
 		}
