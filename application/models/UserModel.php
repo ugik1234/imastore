@@ -83,6 +83,7 @@ class UserModel extends CI_Model
 		}
 	}
 
+
 	public function cekUserByEmailBuyer($data)
 	{
 		$this->db->select("email");
@@ -108,6 +109,59 @@ class UserModel extends CI_Model
 		}
 	}
 
+	public function LupaPassword($data, $ajax = true)
+	{
+
+		$this->db->select("*");
+		$this->db->from('mp_lupas_token as u');
+		$this->db->where('u.id_user like "' . $data['id_user'] . '"');
+		$this->db->where('u.token like "' . $data['token'] . '"');
+		$res = $this->db->get();
+		$row = $res->result_array();
+		// echo $this->db->last_query();
+		if (!empty($row[0])) {
+			$row = $row[0];
+			if (strtotime($row['date_token']) < strtotime("-1 day"))
+				if ($ajax)
+					throw new UserException("Token expired", USER_NOT_FOUND_CODE);
+				else {
+					$row['error'] = true;
+					$row['message'] = "Token Expired";
+				}
+			return $row;
+		} else {
+			if ($ajax)
+				throw new UserException("Token tidak valid", USER_NOT_FOUND_CODE);
+			else {
+				$row['error'] = true;
+				$row['message'] = "Token tidak valid";
+			}
+		}
+	}
+
+	public function cekUserByEmailLupaPassword($data)
+	{
+
+		$this->db->select("id_user, nama,username, email");
+		$this->db->from('mp_user_customer as u');
+		$this->db->where('u.email', $data['email']);
+		$res = $this->db->get();
+		$row = $res->result_array();
+		if (!empty($row[0])) {
+			$row = $row[0];
+			// var_dump($row[0]);
+			$token = sha1(md5(time() . $row['id_user']));
+			$res_data = array(
+				'id_user' => $row['id_user'], 'token' => $token
+			);
+			$this->db->insert('mp_lupas_token', $res_data);
+
+			$row['token'] = $token;
+			return $row;
+		} else
+			throw new UserException("Email tidak ditemukan", USER_NOT_FOUND_CODE);
+	}
+
 	public function getUserByUsername($username = NULL)
 	{
 		$row = $this->getAllUser(['username' => $username, 'is_login' => TRUE]);
@@ -120,7 +174,9 @@ class UserModel extends CI_Model
 	public function login($loginData)
 	{
 		$user = $this->getUserByUsername($loginData['username']);
-		if (md5(sha1($loginData['password'])) !== $user['password'])
+		// echo json_encode($user);
+		// die();
+		if (md5(($loginData['password'])) !== $user['password'])
 			throw new UserException("Password yang kamu masukkan salah.", WRONG_PASSWORD_CODE);
 		return $user;
 	}
@@ -234,6 +290,15 @@ class UserModel extends CI_Model
 		$this->db->where('id_user', $idUser);
 		$this->db->update('user');
 	}
+
+	public function changePasswordCustomer($data)
+	{
+		// $idUser = $this->session->userdata('nama_role') == 'admin' ? $data['id_user'] : $this->session->userdata('id_user');
+		$this->db->set('password', md5($data['password']));
+		$this->db->where('id_user', $data['id_user']);
+		$this->db->update('mp_user_customer');
+	}
+
 
 	public function changeUsername($data)
 	{

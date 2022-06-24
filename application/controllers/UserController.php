@@ -72,6 +72,74 @@ class UserController extends CI_Controller
 		}
 	}
 
+	public function lupasProcess()
+	{
+		try {
+			// $this->SecurityModel->guestOnlyGuard(TRUE);
+			// Validation::ajaxValidateForm($this->SecurityModel->loginValidation());
+
+			$data = $this->input->post();
+			// var_dump($data);
+			// die();
+
+			$data = $this->UserModel->cekUserByEmailLupaPassword($data);
+
+			// var_dump($data);
+			// die();
+			$this->email_send($data, 'lupa_password');
+			echo json_encode(array("error" => FALSE, "user" => 'success', 'data' => $data));
+		} catch (Exception $e) {
+			ExceptionHandler::handle($e);
+		}
+	}
+
+
+	public function verifikasiLupasProcess($id, $token, $ajax = true)
+	{
+		try {
+			// $this->SecurityModel->guestOnlyGuard(TRUE);
+			$data['token'] = $token;
+			$data['id_user'] = $id;
+			$data = $this->UserModel->LupaPassword($data, $ajax);
+
+			// $this->email_send($data, 'activate');
+			// redirect('login');
+			// echo json_encode($data);
+			// $this->load
+			$this->load->view('PublicPage', [
+				'title' => "Daftar",
+				'content' => 'public/LupaPasswordToken',
+				'dataContent' => $data
+			]);
+		} catch (Exception $e) {
+			ExceptionHandler::handle($e);
+		}
+	}
+
+	public function resetPasswordProcess()
+	{
+		try {
+			// $this->SecurityModel->guestOnlyGuard(TRUE);
+			// $data['token'] = $token;
+			// $data['id_user'] = $id;
+
+			// Validation::ajaxValidateForm($this->SecurityModel->loginValidation());
+			// 
+			$data = $this->input->post();
+			if ($data['password'] != $data['repassword']) {
+				throw new UserException("Password tidak sama", USER_NOT_FOUND_CODE);
+			}
+
+			$this->UserModel->LupaPassword($data, true);
+			$this->UserModel->changePasswordCustomer($data);
+
+			echo json_encode(array('error' => false));
+		} catch (Exception $e) {
+			ExceptionHandler::handle($e);
+		}
+	}
+
+
 	public function activator($id, $activate)
 	{
 		try {
@@ -93,8 +161,8 @@ class UserController extends CI_Controller
 
 		$send['to'] = $data['email']; //KPB
 		if ($action == 'activate') {
-			$send['subject'] = 'Activation Indometal Asia Shopping';
-			$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="http://kpbladababel.com/assets/img/logo-kpb.png" width="60px" vspace=0 /></td></tr>';
+			$send['subject'] = 'Activation Indometal Asia Aplication';
+			$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://indometalasia.com/apps/assets/img/ima-transparent2.png" width="60px" vspace=0 /></td></tr>';
 			$emailContent .= '<tr><td style="height:20px"></td></tr>';
 			$url_act = site_url("/activator/{$data['id']}/{$data['activator']}");
 			$emailContent .= "<br><br> Username :  {$data['username']}
@@ -102,7 +170,19 @@ class UserController extends CI_Controller
 						<br> 
 						<br>Selamat Akun anda sudah berhasil didaftarkan, silahkan login dan lengkapi data.";
 			$emailContent .= '<tr><td style="height:20px"></td></tr>';
-			$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='kpbladababel.com/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>kpbladababel.com</a></p></td></tr></table></body></html>";
+			$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='indometalasia.com/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>indometalasia.com</a></p></td></tr></table></body></html>";
+		} else if ($action == 'lupa_password') {
+			$send['subject'] = 'Lupa Password Indometal Asia Aplication';
+			$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background: white;padding-left:3%"><img src="http://indometalasia.com/apps/assets/img/ima-transparent2.png" width="200px" vspace=0 /></td></tr>';
+			$emailContent .= '<tr><td style="height:20px"></td></tr>';
+			$url_act = base_url("/forgot-password-verification/{$data['id_user']}/{$data['token']}");
+			$emailContent .= "<br><br> Username :  {$data['username']}
+						<br> Token :  {$data['token']}
+						<br> 
+						<br>Untuk reset password silahkan<a href='{$url_act}' > klik ini </a>atau masuk melalui url di bawah. 
+						<br>{$url_act}";
+			$emailContent .= '<tr><td style="height:20px"></td></tr>';
+			$emailContent .= "<tr><td style='background:#000000;color: #999999;padding: 2%;text-align: center;font-size: 13px;'><p style='margin-top:1px;'><a href='indometalasia.com/index.php/login' target='_blank' style='text-decoration:none;color: #60d2ff;'>indometalasia.com</a></p></td></tr></table></body></html>";
 		} else {
 			$send['subject'] = 'Activation Store PT INDOMETALASIA';
 			$emailContent = '<!DOCTYPE><html><head></head><body><table width="600px" style="border:1px solid #cccccc;margin: auto;border-spacing:0;"><tr><td style="background:#F00000;padding-left:3%"><img src="https://store.indometalasia.com/assets/images/ima-transparent2.png" width="60px" vspace=0 /></td></tr>';

@@ -193,7 +193,9 @@
                                 swal("Registration Gagal", json['message'], "error");
                                 return;
                             } else {
-                                swal("Success Registration", 'check your email to activation', "success");
+                                swal("Success Registration", 'check your email to activation', "success").then((result) => {
+                                    window.location.href = "<?= base_url() ?>";
+                                });
                             }
                             // $(location).attr('href', '<?= site_url() ?>' + json['user']['nama_controller']);
                         },

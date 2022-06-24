@@ -251,10 +251,10 @@
 
             inputItem = ` <div class="quantity"> ${d['from_order'].substr(0,16)} <br> ${d['to_order'].substr(0,16)}  <hr>${Difference_In_Days} days </div>
                         `
-            subtot = Difference_In_Days * d['purchase']
+            subtot = Difference_In_Days * d['retail']
         } else {
             inputItem = `<div class="quantity"> ${d['qyt']} </div>`
-            subtot = d['qyt'] * d['purchase']
+            subtot = d['qyt'] * d['retail']
         }
         total = total + subtot;
         checkout_items.append(`<div class="cart-block cart-block-item clearfix">
@@ -269,7 +269,7 @@
                 ${inputItem}
                     <div class="price">
                         <span class="final h3">Rp. ${formatRupiah(subtot)}</span>
-                        <span class="discount">Rp. ${formatRupiah(d['purchase'])}</span>
+                        <span class="discount">Rp. ${formatRupiah(d['retail'])}</span>
                     </div>
                     <span class="icon icon-cross icon-delete" onclick="delete_checkout(${d['id']})"></span>
                 </div>

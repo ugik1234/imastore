@@ -55,7 +55,7 @@
         var status = '';
         if (d['status'] == 'unpaid') {
             status = `<span class="label label-danger">${d['status']}</span>`
-            // subtot = Difference_In_Days * d['purchase']
+            // subtot = Difference_In_Days * d['retail']
         } else {
             status = `<span class="label label-info">${d['status']}</span>`
         }

@@ -424,7 +424,7 @@
                                     <a href="<?= base_url() . "/product/" . $product['id'] ?>"><?= $product['product_name'] ?></a>
                                 </h2>
                                 <sub>$ 159,-</sub>
-                                <sup>Rp <?= number_format($product['purchase']) ?>,-</sup>
+                                <sup>Rp <?= number_format($product['retail']) ?>,-</sup>
                                 <span class="description clearfix"><?= $product['category_name'] ?></span>
                             </div>
                         </div>
@@ -593,8 +593,8 @@
                         console.log(dataPopup)
                         popup.name.html(dataPopup['product_name'])
                         var nf = new Intl.NumberFormat();
-                        console.log('Rp. ' + nf.format(dataPopup['purchase'])); // "1,234,567,890"
-                        popup.price.html('Rp. ' + nf.format(dataPopup['purchase']))
+                        console.log('Rp. ' + nf.format(dataPopup['retail'])); // "1,234,567,890"
+                        popup.price.html('Rp. ' + nf.format(dataPopup['retail']))
                         popup.category.html(dataPopup['category_name'])
                         if (dataPopup['type'] == 'Service') {
                             input_date = `

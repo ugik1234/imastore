@@ -64,12 +64,12 @@
                                             $d =  $numberDays->format('%a');
                                             $h =  $numberDays->format('%h');
                                             if ($h > 0) $d = (int)$d + 1;
-                                            $total = $total + ($d * $s['purchase']);
-                                            $cur_total =  ($d * $s['purchase']);
+                                            $total = $total + ($d * $s['retail']);
+                                            $cur_total =  ($d * $s['retail']);
                                             echo $d . 'days';
                                         } else {
-                                            $total = $total + ($s['qyt'] * $s['purchase']);
-                                            $cur_total   = ($s['qyt'] * $s['purchase']);
+                                            $total = $total + ($s['qyt'] * $s['retail']);
+                                            $cur_total   = ($s['qyt'] * $s['retail']);
                                             echo $s['qyt'];
                                         };
                                         ?>

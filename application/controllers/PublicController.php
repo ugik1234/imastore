@@ -47,8 +47,16 @@ class PublicController extends CI_Controller
   public function create_account()
   {
     $this->load->view('PublicPage', [
-      'title' => "Home",
+      'title' => "Daftar",
       'content' => 'public/CreateAccount',
+    ]);
+  }
+
+  public function lupa_password()
+  {
+    $this->load->view('PublicPage', [
+      'title' => "Lupa Password",
+      'content' => 'public/LupaPassword',
     ]);
   }
 
@@ -170,10 +178,10 @@ class PublicController extends CI_Controller
           $strstar = strtotime($s['from_order']);
           $strend = strtotime($s['to_order']);
           if ($h > 0) $d = (int)$d + 1;
-          $total = $total + ($d * $s['purchase']);
+          $total = $total + ($d * $s['retail']);
           $final_price[$i]['tmp_qyt'] = $d;
         } else {
-          $total = $total + ($s['qyt'] * $s['purchase']);
+          $total = $total + ($s['qyt'] * $s['retail']);
           $final_price[$i]['tmp_qyt'] = $s['qyt'];
         };
         $i++;
@@ -208,7 +216,7 @@ class PublicController extends CI_Controller
         $this->ProductModel->addOrder($s, $id_invoice);
         if ($s['type'] == 'Service') {
         } else {
-          $total = $total + ($s['qyt'] * $s['purchase']);
+          $total = $total + ($s['qyt'] * $s['retail']);
         };
         $i++;
       }
@@ -262,7 +270,7 @@ class PublicController extends CI_Controller
         }
         array_push($arr_id, array('id' => $s['product_id'], 'start' => $strstar, 'end' => $strend));
         if ($h > 0) $d = (int)$d + 1;
-        $total = $total + ($d * $s['purchase']);
+        $total = $total + ($d * $s['retail']);
       } else {
         $co = 0;
         array_push($arr_idqyt, array('id' => $s['product_id']));
@@ -279,7 +287,7 @@ class PublicController extends CI_Controller
           }
         }
 
-        $total = $total + ($s['qyt'] * $s['purchase']);
+        $total = $total + ($s['qyt'] * $s['retail']);
       };
     }
     return $total;
@@ -312,9 +320,9 @@ class PublicController extends CI_Controller
         $d =  $numberDays->format('%a');
         $h =  $numberDays->format('%h');
         if ($h > 0) $d = (int)$d + 1;
-        $total = $total + ($d * $s['purchase']);
+        $total = $total + ($d * $s['retail']);
       } else {
-        $total = $total + ($s['qyt'] * $s['purchase']);
+        $total = $total + ($s['qyt'] * $s['retail']);
       };
     }
     return $total;
@@ -363,7 +371,7 @@ class PublicController extends CI_Controller
           $d =  $numberDays->format('%a');
           $h =  $numberDays->format('%h');
           if ($h > 0) $d = (int)$d + 1;
-          $data['final_price'] = number_format($d * $data['purchase'], '2');
+          $data['final_price'] = number_format($d * $data['retail'], '2');
           $data['qyt'] = $d . ' days';
         } else {
           if ($input['qyt'] > 0 && $input['qyt'] <= $data['quantity']) {
@@ -373,7 +381,7 @@ class PublicController extends CI_Controller
               'qyt' => $input['qyt'],
             );
             $data['qyt'] = $input['qyt'];
-            $data['final_price'] = number_format($input['qyt'] * $data['purchase'], '2');
+            $data['final_price'] = number_format($input['qyt'] * $data['retail'], '2');
           } else {
             throw new UserException("Stok tidak tersedia !", USER_NOT_FOUND_CODE);
           }

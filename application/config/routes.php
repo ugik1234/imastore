@@ -61,6 +61,13 @@ $route['invoice/s'] = 'PublicController/invoiceopen';
 $route['create-account'] = 'PublicController/create_account';
 $route['login-process'] = 'UserController/loginProcess';
 $route['register-process'] = 'UserController/registerProcess';
+$route['lupas-process'] = 'UserController/lupasProcess';
+$route['forgot-password-verification/(:num)/(:any)'] = 'UserController/verifikasiLupasProcess/$1/$2';
+$route['forgot-password-verification/(:num)/(:any)/(:any)'] = 'UserController/verifikasiLupasProcess/$1/$2/$3';
+$route['reset-password-process'] = 'UserController/resetPasswordProcess';
+
+$route['forgot-password'] = 'PublicController/lupa_password';
+
 $route['activator/(:num)/(:any)'] = "UserController/activator/$1/$2";
 $route['logout'] = 'UserController/logout';
 $route['change-password'] = 'UserController/changePassword';

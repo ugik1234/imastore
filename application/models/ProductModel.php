@@ -113,7 +113,7 @@ class ProductModel extends CI_Model
 
   public function MyCart()
   {
-    $this->db->select('mp_category.category_name, mp_cart.*, mp_productslist.product_name, mp_productslist.purchase , mp_productslist.quantity as stock , mp_productslist.image');
+    $this->db->select('mp_category.category_name, mp_cart.*, mp_productslist.product_name, mp_productslist.retail , mp_productslist.quantity as stock , mp_productslist.image');
     $this->db->from('mp_cart');
     $this->db->join('mp_productslist', 'mp_productslist.id = mp_cart.product_id');
     $this->db->join('mp_category', 'mp_category.id = mp_productslist.category_id and mp_productslist.status != 2');
@@ -248,8 +248,8 @@ class ProductModel extends CI_Model
     // $data['product_id'] = $data['prod'];
     $data['invoice_id'] = $id;
     $data['qyt'] = $data['tmp_qyt'];
-    $data['unit_price'] = $data['purchase'];
-    $data['sub_total'] = $data['tmp_qyt'] * $data['purchase'];
+    $data['unit_price'] = $data['retail'];
+    $data['sub_total'] = $data['tmp_qyt'] * $data['retail'];
     // echo json_encode($data);
     // die();
     $this->db->insert('mp_order', DataStructure::slice($data, ['invoice_id', 'product_name', 'category_name', 'customer_id', 'product_id', 'type', 'from_order', 'to_order', 'alamat_pengiriman', 'qyt', 'unit_price', 'sub_total']));

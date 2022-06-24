@@ -19,9 +19,9 @@ if (!empty($_COOKIE['lang_set']) && $_COOKIE['lang_set'] == 'en') {
           <span class="text-center">
             <h3 class="font-bold" style="margin-bottom:16px">
               <?php if (!empty($_COOKIE['lang_set']) && $_COOKIE['lang_set'] == 'en') {
-                echo 'Registration System Information Kantor Pemasaran Bersama';
+                echo 'Registration PT Indometal Asia Application';
               } else {
-                echo 'Pendaftaran Sistem Informasi Kantor Pemasaran Bersama';
+                echo 'Pendaftaran Aplikasi PT Indometal Asia';
               } ?>
             </h3>
           </span>
