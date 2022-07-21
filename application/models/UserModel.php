@@ -184,8 +184,6 @@ class UserModel extends CI_Model
 	public function login($loginData)
 	{
 		$user = $this->getUserByEmail($loginData['email']);
-		// echo json_encode($user);
-		// die();
 		if (md5(($loginData['password'])) !== $user['password'])
 			throw new UserException("Password yang kamu masukkan salah.", WRONG_PASSWORD_CODE);
 		return $user;
