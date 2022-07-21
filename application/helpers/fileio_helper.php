@@ -9,6 +9,7 @@ class FileIO
 
   public static function upload($field, $folder, $type, $allowedType = NULL)
   {
+
     $CI = &get_instance();
     $CI->load->library('upload');
     $CI->upload->initialize(array(
@@ -31,7 +32,16 @@ class FileIO
 
   public static function upload2($field, $folder, $type, $allowedType = NULL)
   {
-    // throw new UserException($folder, UPLOAD_FAILED_CODE);
+    // echo "field = " . $field;
+    // echo "<br>dir = " . $folder;
+    // echo "<br>allowedType s= " . $allowedType;
+    // echo json_encode(array(
+    //   'upload_path' => realpath(APPPATH . '../uploads/' . $folder),
+    //   'allowed_types' => $allowedType != NULL ? $allowedType : 'jpg|jpeg|png|gif|doc|docx|pdf',
+    //   'max_size' => '2500',
+    //   'encrypt_name' => TRUE,
+    // ));
+    // die();
     $CI = &get_instance();
     $CI->load->library('upload');
     $CI->upload->initialize(array(
@@ -55,8 +65,8 @@ class FileIO
   public static function delete($url)
   {
     $path = realpath(APPPATH . '../' . $url);
-  //  echo $path;
-  //  return $path;
+    //  echo $path;
+    //  return $path;
     if (!empty($url) && file_exists($path)) {
       if (!unlink($path)) {
         throw new UserException('Gagal mengahapus ', 0);
@@ -114,7 +124,18 @@ class FileIO
     return $filename;
   }
 
-  public static function genericReUpload($field , $allowedType, $oldData = NULL, $data)
+  public static function imaUpload($field, $dir, $allowedType, $oldData = NULL, $data)
+  {
+    // echo "field = " . $field;
+    // echo "<br>dir = " . $dir;
+    // echo "<br>allowedType = " . $allowedType;
+    // die();
+    $filename = NULL;
+    $filename = !empty($_FILES[$field]['name']) ? FileIO::upload2($field, $dir, NULL, $allowedType)['filename'] : NULL;
+    return $filename;
+  }
+
+  public static function genericReUpload($field, $allowedType, $oldData = NULL, $data)
   {
     $field = 're_upload_dokumen';
     // var_dump($data);

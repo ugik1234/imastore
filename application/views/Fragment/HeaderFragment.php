@@ -117,8 +117,14 @@
                 <!-- ==========  Pre navigation ========== -->
                 <?php
                 if (!empty($this->session->userdata['username'])) {
-                    $CI = &get_instance();
-                    $cart = $CI->MyCart();
+                    // $CI = &get_instance();
+                    // $cart = $CI->MyCart();
+                    // $cart = 
+
+                    // $ci = get_instance();
+                    // $ci->load->helper('customfunctions');
+                    $cart =   MyCart($this->session->userdata()['id_user']);
+                    // tanggal_indonesia();
                     $cart_count = count($cart);
                     $this->load->view('Fragment/Cart', array('cart' => $cart));
                     $this->load->view('Fragment/UserControl');
@@ -148,67 +154,65 @@
 
                 <div class="navigation navigation-top clearfix">
                     <ul>
-                        <!--add active class for current page-->
-                        <!-- <li class="left-side">
-                            <a href="index.html" class="logo-icon"><img src="<?= base_url() ?>assets/images/ima-transparent.png" style="max-width : 100px" alt="Alternate Text" /></a>
-                        </li> -->
-                        <li class="left-side"><a href="#">Barang</a></li>
-                        <!--
-                            
-                            // Use active class for current state
-
-                            <li class="left-side active"><a href="#">Man</a></li>
-
-                        -->
+                        <!-- <li class="left-side"><a href="#">Barang</a></li>
                         <li class="left-side"><a href="#">Jasa</a></li>
-                        <li class="left-side"><a href="#">Sewa</a></li>
+                        <li class="left-side"><a href="#">Sewa</a></li> -->
                         <?php if (!empty($this->session->userdata['username'])) {  ?>
-                            <li class="left-side"><a href="<?= base_url() ?>invoice">Invoice</a></li>
-                            <li>
+                            <!-- <li class="left-side"><a href="<?= base_url() ?>invoice">Invoice</a></li>
+                            <li class="left-side"><a href="<?= base_url() ?>daftar-mitra">Daftar Mitra</a></li> -->
+                            <!-- <li>
                                 <a href="javascript:void(0);" class="open-envelope"><i class="icon icon-envelope"></i></a>
-                            </li>
-                            <li>
+                            </li> -->
+                            <!-- <li>
                                 <a href="javascript:void(0);" class="open-cart"><i class="icon icon-cart"></i> <span id="cart_count1"><?= $cart_count ?></span></a>
+                            </li> -->
+                            <li>
+                                <a href="#" class="open-cart"><i class="icon icon-cart"></i> <span id="cart_count2"><?= $cart_count ?></span></a>
                             </li>
+                        <?php } else { ?>
 
-                        <?php }  ?>
-
-
+                        <?php     }  ?>
                         <li>
                             <a href="javascript:void(0);" class="open-login"><i class="icon icon-user"></i></a>
                         </li>
+
+
                         <li>
                             <a href="javascript:void(0);" class="open-search"><i class="icon icon-magnifier"></i></a>
                         </li>
+
                     </ul>
                 </div>
                 <!-- ==========  Main navigation ========== -->
 
+
+                <!-- ==========  Search wrapper ========== -->
+
+                <div class="search-wrapper">
+                    <input class="form-control" placeholder="Search..." />
+                    <button class="btn btn-main">Go!</button>
+                </div>
                 <div class="navigation navigation-main">
-                    <?php if (!empty($this->session->userdata['username'])) {  ?>
-                        <a href="#" class="open-envelope"><i class="icon icon-envelope"></i></a>
-                        <a href="#" class="open-cart"><i class="icon icon-cart"></i> <span id="cart_count2"><?= $cart_count ?></span></a>
-                    <?php }  ?>
-
-
-                    <a href="#" class="open-login"><i class="icon icon-user"></i></a>
-                    <a href="#" class="open-search"><i class="icon icon-magnifier"></i></a>
                     <a href="#" class="open-menu"><i class="icon icon-menu"></i></a>
+                    <?php
+                    if (!empty($this->session->userdata['username'])) {
+                    ?>
+                        <li>
+                            <a href="#" class="open-cart"><i class="icon icon-cart"></i> <span>4</span></a>
+                        </li>
+                    <?php
+                    }
+                    ?>
+                    <a href="#" class="open-login"><i class="icon icon-user"></i></a>
                     <div class="floating-menu">
                         <!--mobile toggle menu trigger-->
                         <div class="close-menu-wrapper">
                             <span class="close-menu"><i class="icon icon-cross"></i></span>
                         </div>
-
-                        <!-- <ul> -->
-                        <?php
-                        // if (!empty($this->session->userdata()['nama_role'])) $this->load->view('Fragment/' . strtolower($this->session->userdata('nama_role')) . '/SidebarFragment'); 
-                        ?>
-
-                        <!-- <li>
-                                <a href="#">Home
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
-                                <div class="navbar-dropdown navbar-dropdown-single">
+                        <ul>
+                            <li>
+                                <a href="<?= base_url() ?>">Home <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
+                                <!-- <div class="navbar-dropdown navbar-dropdown-single">
                                     <div class="navbar-box">
                                         <div class="box-full">
                                             <div class="box clearfix">
@@ -221,11 +225,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </li>
                             <li>
-                                <a href="#">Pages
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
+                                <a href="#">Barang & Jasa <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
                                 <div class="navbar-dropdown navbar-dropdown-single">
                                     <div class="navbar-box">
                                         <div class="box-full">
@@ -235,10 +238,8 @@
                                                     <li><a href="about.html">About us</a></li>
                                                     <li><a href="contact.html">Contact</a></li>
                                                     <li><a href="404.html">Not found 404</a></li>
-                                                    <li><a href="login.html">Login & Register</a></li>
-                                                    <li>
-                                                        <a href="email-receipt.html">Email - Receipt template</a>
-                                                    </li>
+                                                    <li><a href="login.html">Login &amp; Register</a></li>
+                                                    <li><a href="email-receipt.html">Email - Receipt template</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -246,395 +247,15 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="#">Shop
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
+                                <a href="#">Mitra <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
                                 <div class="navbar-dropdown navbar-dropdown-single">
                                     <div class="navbar-box">
                                         <div class="box-full">
                                             <div class="box clearfix">
                                                 <ul>
-                                                    <li class="label">Product page</li>
-                                                    <li>
-                                                        <a href="category.html">Products categories</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="products-grid.html">Products grid</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="products-list.html">Products list</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="products-grid-intro.html">Products grid intro</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="products-topbar.html">Products topbar filter</a>
-                                                    </li>
-                                                    <li><a href="product.html">Product overview</a></li>
+                                                    <li><a href="<?= base_url('mitra-tambang') ?>">Mitra Tambang</a></li>
+                                                    <li><a href="<?= base_url('mitra-rental-mobil') ?>">Mitra Rental Mobil</a></li>
                                                 </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#">Blog
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
-                                <div class="navbar-dropdown navbar-dropdown-single">
-                                    <div class="navbar-box">
-                                        <div class="box-full">
-                                            <div class="box clearfix">
-                                                <ul>
-                                                    <li class="label">Blog pages</li>
-                                                    <li><a href="blog-grid.html">Blog grid</a></li>
-                                                    <li><a href="blog-list.html">Blog list</a></li>
-                                                    <li>
-                                                        <a href="blog-grid-fullpage.html">Blog fullpage</a>
-                                                    </li>
-                                                    <li><a href="ideas.html">Blog ideas</a></li>
-                                                    <li><a href="article.html">Article</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#">Checkout
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
-                                <div class="navbar-dropdown navbar-dropdown-single">
-                                    <div class="navbar-box">
-                                        <div class="box-full">
-                                            <div class="box clearfix">
-                                                <ul>
-                                                    <li class="label">Checkout</li>
-                                                    <li>
-                                                        <a href="checkout-1.html">Checkout - Cart items</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="checkout-2.html">Checkout - Delivery</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="checkout-3.html">Checkout - Payment</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="checkout-4.html">Checkout - Receipt</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="index.html">Boxmenu
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
-                                <div class="navbar-dropdown">
-                                    <div class="navbar-box">
-                                        <div class="box-lg">
-                                            <div class="box clearfix">
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> Washers &
-                                                                Dryers
-                                                            </li>
-                                                            <li><a href="#">Dishwashers</a></li>
-                                                            <li><a href="#">Ovens & Ranges</a></li>
-                                                            <li><a href="#">Irons & Ironing Boards</a></li>
-                                                            <li><a href="#">Heating & Cooling</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> Kitchen
-                                                                Appliances
-                                                            </li>
-                                                            <li><a href="#">Coffee Makers</a></li>
-                                                            <li><a href="#">Microwaves</a></li>
-                                                            <li><a href="#">Blenders</a></li>
-                                                            <li><a href="#">Slow Cookers</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> Freezers
-                                                            </li>
-                                                            <li><a href="#">Mini Freezers</a></li>
-                                                            <li><a href="#">Ice Makers</a></li>
-                                                            <li><a href="#">Chest Freezers</a></li>
-                                                            <li><a href="#">Upright Freezers</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> TV & Video
-                                                            </li>
-                                                            <li><a href="#">TVs</a></li>
-                                                            <li><a href="#">DVD & Blu-ray Players</a></li>
-                                                            <li><a href="#">Home Audio & Theater</a></li>
-                                                            <li><a href="#">TVs Accessories</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> Cell phones
-                                                            </li>
-                                                            <li><a href="#">Straight Talk Phones</a></li>
-                                                            <li><a href="#">Unlocked Phones</a></li>
-                                                            <li><a href="#">Contract Phones</a></li>
-                                                            <li><a href="#">No-Contract Phones</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> iPad & Tablets
-                                                            </li>
-                                                            <li><a href="#">iPad</a></li>
-                                                            <li><a href="#">Windows Tablets</a></li>
-                                                            <li><a href="#">Android Tablets</a></li>
-                                                            <li><a href="#">Accessories</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> Computers
-                                                            </li>
-                                                            <li><a href="#">Laptops</a></li>
-                                                            <li><a href="#">Desktops</a></li>
-                                                            <li><a href="#">PC Gaming</a></li>
-                                                            <li><a href="#">Printers & Supplies</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> Floor Care
-                                                            </li>
-                                                            <li><a href="#">Upright Vacuums</a></li>
-                                                            <li><a href="#">Stick Vacuums</a></li>
-                                                            <li><a href="#">Robotic Vacuums</a></li>
-                                                            <li><a href="#">Handheld Vacuums</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <ul>
-                                                            <li class="label">
-                                                                <i class="icon icon-star"></i> Refrigerators
-                                                            </li>
-                                                            <li><a href="#">Mini Fridges</a></li>
-                                                            <li><a href="#">Kegerators</a></li>
-                                                            <li><a href="#">Beverage Refrigerators</a></li>
-                                                            <li><a href="#">Wine Refrigerators</a></li>
-                                                            <li class="more">
-                                                                <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                    More</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="box-sm">
-                                            <div class="image">
-                                                <img src="<?= base_url() ?>assets/images/menu-item-1.jpg" alt="Alternate Text" />
-                                                <img src="<?= base_url() ?>assets/images/menu-item-2.jpg" alt="Alternate Text" />
-                                            </div>
-                                            <div class="box">
-                                                <div class="h2">Shop Electronics</div>
-                                                <div class="clearfix">
-                                                    <p>
-                                                        Homes that differ in terms of style, concept and
-                                                        architectural solutions have been furnished by
-                                                        Furniture Factory. These spaces tell of an
-                                                        international lifestyle that expresses modernity,
-                                                        research and a creative spirit.
-                                                    </p>
-                                                    <a class="btn btn-clean btn-big" href="products-grid.html">Shop now</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li>
-                                <a href="#">Megamenu
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
-                                <div class="navbar-dropdown">
-                                    <div class="navbar-box">
-                                        <div class="box-full">
-                                            <div class="box clearfix">
-                                                <div class="row">
-                                                    <div class="clearfix">
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> Computers
-                                                                </li>
-                                                                <li><a href="#">Laptops</a></li>
-                                                                <li><a href="#">Desktops</a></li>
-                                                                <li><a href="#">PC Gaming</a></li>
-                                                                <li><a href="#">Printers & Supplies</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> Vacuums
-                                                                </li>
-                                                                <li><a href="#">Upright Vacuums</a></li>
-                                                                <li><a href="#">Stick Vacuums</a></li>
-                                                                <li><a href="#">Robotic Vacuums</a></li>
-                                                                <li><a href="#">Handheld Vacuums</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> Refrigerators
-                                                                </li>
-                                                                <li><a href="#">Mini Fridges</a></li>
-                                                                <li><a href="#">Kegerators</a></li>
-                                                                <li>
-                                                                    <a href="#">Beverage Refrigerators</a>
-                                                                </li>
-                                                                <li><a href="#">Wine Refrigerators</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> Appliances &
-                                                                    Accessories
-                                                                </li>
-                                                                <li><a href="#">Dishwasher Parts</a></li>
-                                                                <li><a href="#">Oven & Ranges Parts</a></li>
-                                                                <li>
-                                                                    <a href="#">Refrigerator & Freezer Parts</a>
-                                                                </li>
-                                                                <li><a href="#">Washer & Dryer Parts</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clearfix">
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> Freezers
-                                                                </li>
-                                                                <li><a href="#">Mini Freezers</a></li>
-                                                                <li><a href="#">Ice Makers</a></li>
-                                                                <li><a href="#">Chest Freezers</a></li>
-                                                                <li><a href="#">Upright Freezers</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> TV & Video
-                                                                </li>
-                                                                <li><a href="#">TVs</a></li>
-                                                                <li><a href="#">DVD & Blu-ray Players</a></li>
-                                                                <li><a href="#">Home Audio & Theater</a></li>
-                                                                <li><a href="#">TVs Accessories</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> Cell phones
-                                                                </li>
-                                                                <li><a href="#">Straight Talk Phones</a></li>
-                                                                <li><a href="#">Unlocked Phones</a></li>
-                                                                <li><a href="#">Contract Phones</a></li>
-                                                                <li><a href="#">No-Contract Phones</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <ul>
-                                                                <li class="label">
-                                                                    <i class="icon icon-star"></i> iPad &
-                                                                    Tablets
-                                                                </li>
-                                                                <li><a href="#">iPad</a></li>
-                                                                <li><a href="#">Windows Tablets</a></li>
-                                                                <li><a href="#">Android Tablets</a></li>
-                                                                <li><a href="#">Accessories</a></li>
-                                                                <li class="more">
-                                                                    <a href="#"><i class="icon icon-chevron-right"></i>
-                                                                        More</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -642,9 +263,8 @@
                             </li>
                             <li><a href="shortcodes.html">Shortcodes</a></li>
 
-                            <li class="nav-settings">
-                                <a href="javascript:void(0);"><span class="nav-settings-value">USD</span>
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
+                            <!-- <li class="nav-settings">
+                                <a href="javascript:void(0);"><span class="nav-settings-value">USD</span> <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
                                 <div class="navbar-dropdown navbar-dropdown-single">
                                     <div class="navbar-box">
                                         <div class="box-full">
@@ -658,36 +278,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </li>
-                            <li class="nav-settings">
-                                <a href="javascript:void(0);"><span class="nav-settings-value">ENG</span>
-                                    <span class="open-dropdown"><i class="fa fa-angle-down"></i></span></a>
-                                <div class="navbar-dropdown navbar-dropdown-single">
-                                    <div class="navbar-box">
-                                        <div class="box-full">
-                                            <div class="box clearfix">
-                                                <ul class="nav-settings-list">
-                                                    <li><a href="javascript:void(0);">ENG</a></li>
-                                                    <li><a href="javascript:void(0);">GER</a></li>
-                                                    <li><a href="javascript:void(0);">لعربية</a></li>
-                                                    <li><a href="javascript:void(0);">עִבְרִית</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul> -->
+                            </li> -->
+                        </ul>
                     </div>
                 </div>
-
-                <!-- ==========  Search wrapper ========== -->
-
-                <div class="search-wrapper">
-                    <input class="form-control" placeholder="Search..." />
-                    <button class="btn btn-main">Go!</button>
-                </div>
-
                 <!-- ==========  Mailbox wrapper ========== -->
 
                 <?php

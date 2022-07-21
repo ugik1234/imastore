@@ -331,7 +331,6 @@ class PublicController extends CI_Controller
   public function MyCart()
   {
     $this->SecurityModel->userOnlyGuard(true);
-
     return $this->ProductModel->MyCart();
   }
 

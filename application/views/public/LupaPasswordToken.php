@@ -63,8 +63,8 @@
 
                                     <div class="row">
 
-                                        <input type="text" value="<?= $dataContent['id_user'] ?>" class="form-control" id="id_user" name="id_user" placeholder="Name: *">
-                                        <input type="text" value="<?= $dataContent['token'] ?>" class="form-control" id="token" name="token" placeholder="Company name: *">
+                                        <input type="hidden" value="<?= $dataContent['id_user'] ?>" class="form-control" id="id_user" name="id_user" placeholder="Name: *">
+                                        <input type="hidden" value="<?= $dataContent['token'] ?>" class="form-control" id="token" name="token" placeholder="Company name: *">
 
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <input type="password" placeholder="Re-New Password" class="form-control" id="repassword" name="repassword" autocomplete="new-password">
+                                                <input type="password" data-loading-text="Loading .." placeholder="Re-New Password" class="form-control" id="repassword" name="repassword" autocomplete="new-password">
                                             </div>
                                         </div>
 

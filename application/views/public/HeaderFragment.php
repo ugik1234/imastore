@@ -16,7 +16,7 @@
     <link rel="icon" href="favicon.ico">
 
     <!--Title-->
-    <title>U Store</title>
+    <title>IMA Store</title>
 
     <!--CSS bundle -->
     <link rel="stylesheet" media="all" href="<?= base_url('assets/') ?>css/bootstrap.css" />
@@ -106,8 +106,6 @@
             <div class="clearfix">
                 <a href="<?= base_url() ?>" class="logo"><img src="assets/images/logo.png" alt="" /></a>
 
-                <!-- ==========  Pre navigation ========== -->
-
                 <div class="navigation navigation-pre clearfix">
                     <div class="row">
                         <div class="col-md-3">
@@ -125,22 +123,13 @@
                     </div>
                 </div>
 
-                <!-- ==========  Top navigation ========== -->
 
-                <div class="navigation navigation-top clearfix">
+                <!-- <div class="navigation navigation-top clearfix">
                     <ul>
-                        <!--add active class for current page-->
                         <li class="left-side">
                             <a href="<?= base_url() ?>" class="logo-icon"><img src="<?= base_url() ?>assets/images/ima-transparent.png" alt="Alternate Text" /></a>
                         </li>
                         <li class="left-side"><a href="#">Man</a></li>
-                        <!--
-                            
-                            // Use active class for current state
-
-                            <li class="left-side active"><a href="#">Man</a></li>
-
-                        -->
                         <li class="left-side"><a href="#">Woman</a></li>
                         <li class="left-side"><a href="#">Kids</a></li>
                         <li>
@@ -153,9 +142,8 @@
                             <a href="javascript:void(0);" class="open-cart"><i class="icon icon-cart"></i> <span>4</span></a>
                         </li>
                     </ul>
-                </div>
+                </div> -->
 
-                <!-- ==========  Main navigation ========== -->
 
                 <div class="navigation navigation-main">
                     <a href="#" class="open-login"><i class="icon icon-user"></i></a>

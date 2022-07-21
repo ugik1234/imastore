@@ -59,6 +59,14 @@ class UserController extends CI_Controller
 			Validation::ajaxValidateForm($this->SecurityModel->loginValidation());
 
 			$data = $this->input->post();
+			// $email = test_input($_POST["email"]);
+			if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+				throw new UserException("Email tidak valid.", WRONG_PASSWORD_CODE);
+			} else {
+				$email = $this->UserModel->getAllUser(['email' => $data['email'], 'is_login' => TRUE]);
+				if (!empty($email))
+					throw new UserException("Email sudah terdaftar.", WRONG_PASSWORD_CODE);
+			}
 			// var_dump($data);
 			// die();
 

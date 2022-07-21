@@ -1,4 +1,5 @@
 /application/vendor
+/uploads
 /application/composer.lock
 /application/config/database.php
 /application/helpers/url_helper.php

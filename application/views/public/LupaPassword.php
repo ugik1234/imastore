@@ -36,7 +36,7 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <button href="" id="registerBtn" class="btn btn-main btn-block">Kirim</button>
+                                            <button href="" id="registerBtn" data-loading-text="Loading .." class="btn btn-main btn-block">Kirim</button>
                                         </div>
 
                                     </div>

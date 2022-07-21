@@ -67,6 +67,8 @@ $route['forgot-password-verification/(:num)/(:any)/(:any)'] = 'UserController/ve
 $route['reset-password-process'] = 'UserController/resetPasswordProcess';
 
 $route['forgot-password'] = 'PublicController/lupa_password';
+$route['mitra-tambang'] = 'MitraController';
+$route['mitra-tambang/edit'] = 'MitraController/index/edit';
 
 $route['activator/(:num)/(:any)'] = "UserController/activator/$1/$2";
 $route['logout'] = 'UserController/logout';
